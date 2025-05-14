@@ -15,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           JOIN Course  c ON c.course_id = s.course_id
           WHERE s.prof_ssn = '$ssn'";
         $res = $conn->query($sql);
+        if ($res === false) {
+          die("SQL error (byProf): " . $conn->error);
+        }
         $out .= "<h3>Classes taught by $ssn</h3><table border=1><tr>
                  <th>Course</th><th>Room</th><th>Days</th>
                  <th>Start</th><th>End</th></tr>";
@@ -37,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           WHERE s.course_id = $cid AND s.section_no = $sec
           GROUP BY grade ORDER BY grade";
         $res = $conn->query($sql);
+        if ($res === false) {
+          die("SQL error (bySect): " . $conn->error);
+        }
         $out .= "<h3>Grade counts for Course $cid – Section $sec</h3>";
         $out .= "<table border=1><tr><th>Grade</th><th>#</th></tr>";
         while ($row = $res->fetch_assoc()) {
@@ -67,6 +73,9 @@ Course:
 <select name="course">
 <?php
 $res = $conn->query("SELECT course_id, title FROM Course");
+if ($res === false) {
+    die("SQL error (course list): " . $conn->error);
+}
 option_list($res,'course_id','title');
 ?>
 </select>

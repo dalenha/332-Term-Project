@@ -16,6 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           WHERE s.course_id = $cid
           GROUP BY s.sec_id";
         $res = $conn->query($sql);
+        if ($res === false) {
+          die("SQL error (byCourse): " . $conn->error);
+        }
         $out .= "<h3>Sections for Course $cid</h3>
                  <table border=1><tr>
                  <th>Sec#</th><th>Room</th><th>Days</th>
@@ -40,6 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           JOIN Course  c ON c.course_id = s.course_id
           WHERE e.cwid = '$cwid'";
         $res = $conn->query($sql);
+        if ($res === false) {
+          die("SQL error (byStudent): " . $conn->error);
+        }
         $out .= "<h3>Transcript for $cwid</h3>
                  <table border=1><tr><th>Course</th>
                  <th>Sec#</th><th>Grade</th></tr>";
@@ -64,6 +70,9 @@ Course:
 <select name="course">
 <?php
 $res = $conn->query("SELECT course_id, title FROM Course");
+if ($res === false) {
+    die("SQL error (course list): " . $conn->error);
+}
 option_list($res,'course_id','title');
 ?>
 </select>
